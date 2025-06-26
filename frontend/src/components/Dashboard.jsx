@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {logOut} from "../supabase"
+import {logOut, getAllItems, getAllMyItems, getAllMyOrders} from "../supabase"
 
 function Dashboard() {
     const navigate = useNavigate();
