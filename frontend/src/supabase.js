@@ -48,7 +48,7 @@ export async function sellItem(seller_id, item_name, item_desc, item_qnty, item_
 export async function buyItem(buyer_id, item_id, qnty_brought) {
   const { data: itemData, error: itemError } = await supabase
     .from('sell_item')
-    .select('item_quantity')
+    .select('item_quantity, quantity_sold')
     .eq('item_id', item_id)
     .single();
 
@@ -56,19 +56,18 @@ export async function buyItem(buyer_id, item_id, qnty_brought) {
     return { data: null, error: itemError };
   }
 
-  const currentQty = itemData.item_quantity;
+  const availableQty = itemData.item_quantity - itemData.quantity_sold;
 
-  if (currentQty < qnty_brought) {
+  if (availableQty < qnty_brought) {
     return { data: null, error: "Not enough quantity available" };
   }
 
-  const newQty = currentQty - qnty_brought;
+  const updatedQtySold = itemData.quantity_sold + qnty_brought;
 
-  const { data: updateData, error: updateError } = await supabase
+  const { error: updateError } = await supabase
     .from('sell_item')
-    .update({ item_quantity: newQty })
-    .eq('item_id', item_id)
-    .select();
+    .update({ quantity_sold: updatedQtySold })
+    .eq('item_id', item_id);
 
   if (updateError) {
     return { data: null, error: updateError };
