@@ -22,7 +22,7 @@ export async function login(email, password) {
 }
 
 
-export async function logout() {
+export async function logOut() {
   let { error } = await supabase.auth.signOut()
   return {error}
 }
