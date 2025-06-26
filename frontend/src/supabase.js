@@ -81,4 +81,32 @@ export async function buyItem(buyer_id, item_id, qnty_brought) {
 }
 
 
+export async function getAllItems() {
+  const { data, error } = await supabase
+    .from('sell_item')
+    .select('*');
+
+  return { data, error };
+}
+
+
+export async function getAllMyItems(seller_id) {
+  const { data, error } = await supabase
+    .from('sell_item')
+    .select('*')
+    .eq('seller_id', seller_id);
+
+  return { data, error };
+}
+
+export async function getAllMyOrders(buyer_id) {
+  const { data, error } = await supabase
+    .from('order_item')
+    .select('*')
+    .eq('buyer_id', buyer_id);
+
+  return { data, error };
+}
+
+
 export default supabase;
