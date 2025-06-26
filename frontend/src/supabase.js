@@ -38,7 +38,6 @@ export async function sellItem(seller_id, item_name, item_desc, item_qnty, item_
 
 
 export async function buyItem(buyer_id, item_id, qnty_brought) {
-
   const { data: itemData, error: itemError } = await supabase
     .from('sell_item')
     .select('item_quantity')
@@ -70,16 +69,15 @@ export async function buyItem(buyer_id, item_id, qnty_brought) {
   const { data, error } = await supabase
     .from('order_item')
     .insert([
-        { 
-            item_id: item_id,
-            buyer_id: buyer_id,
-            quantity_brought: qnty_brought
-        },
+      {
+        item_id,
+        buyer_id,
+        quantity_brought: qnty_brought
+      }
     ])
-    .select()
+    .select();
 
-
-  return { data: data, error: error };
+  return { data, error };
 }
 
 
