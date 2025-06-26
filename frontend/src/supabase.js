@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { useSyncExternalStore } from 'react'
 
 const supabaseUrl = "https://agqcrwknkygoqynlthhl.supabase.co"
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFncWNyd2tua3lnb3F5bmx0aGhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA4Njc5ODQsImV4cCI6MjA2NjQ0Mzk4NH0.2AL_HDabpLHS3k3YmgW-w-_xtceVOOCOFalj3eSNhC4"
@@ -19,6 +20,13 @@ export async function login(email, password) {
         })
     return {data, error}
 }
+
+
+export async function logout() {
+  let { error } = await supabase.auth.signOut()
+  return {error}
+}
+
 
 export async function sellItem(seller_id, item_name, item_desc, item_qnty, item_price) {
     const { data, error } = await supabase
@@ -107,6 +115,8 @@ export async function getAllMyOrders(buyer_id) {
 
   return { data, error };
 }
+
+
 
 
 export default supabase;
