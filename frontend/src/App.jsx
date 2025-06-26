@@ -1,12 +1,39 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
 import { signUp } from "./supabase";
+import Navbar from "./components/Navbar";
+import Home from "./components/Home";
+import Login from "./components/Login";
+import Signup from "./components/Signup";
+import About from "./components/About";
+import { createBrowserRouter, RouterProvider } from "react-router";
 
 function App() {
-  return <div>Hello</div>;
-}
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Home />,
+    },
+    {
+      path: "/login",
+      element: <Login />,
+    },
+    {
+      path: "/signup",
+      element: <Signup />,
+    },
+    {
+      path: "/about",
+      element: <About />,
+    },
+  ]);
 
+  return (
+    <div>
+      <Navbar />
+      <RouterProvider router={router} />
+    </div>
+  );
+}
 
 export default App;
