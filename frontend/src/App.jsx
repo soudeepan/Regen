@@ -6,6 +6,7 @@ import Home from "./components/Home";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import About from "./components/About";
+import Dashboard from "./components/Dashboard";
 import { createBrowserRouter, RouterProvider } from "react-router";
 
 function App() {
@@ -25,6 +26,10 @@ function App() {
     {
       path: "/about",
       element: <About />,
+    },
+    {
+      path: "/dashboard",
+      element: <Dashboard />,
     },
   ]);
 

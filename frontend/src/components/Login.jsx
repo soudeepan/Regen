@@ -15,8 +15,8 @@ function Login() {
   async function handleSubmit(event) {
       event.preventDefault(); 
       const { data, error } = await login(credential.email, credential.password);
-      console.log("Login Data:", data);
-      console.log("Login Error:", error);
+      localStorage.setItem('user', JSON.stringify(data));
+      window.location.href = "/dashboard";
     }
 
   return (
