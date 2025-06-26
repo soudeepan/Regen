@@ -1,22 +1,27 @@
 import React, { useState } from "react";
-import signUp from "../supabase";
+import {signUp} from "../supabase";
 
 function Signup() {
   const [credential, setCredential] = useState({ email: "", password: "" });
 
   function handleChange(event) {
     const { type, value } = event.target;
-    setCredential((prevData) => {
-      return {
-        ...prevData,
-        [type]: value,
-      };
-    });
+    setCredential((prevData) => ({
+      ...prevData,
+      [type]: value,
+    }));
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault(); // Prevent page reload
+    const { data, error } = await signUp(credential.email, credential.password);
+    console.log("Signup Data:", data);
+    console.log("Signup Error:", error);
   }
 
   return (
     <div id="form">
-      <form className="signup-form">
+      <form className="signup-form" onSubmit={handleSubmit}>
         <h2>Sign Up</h2>
         <input
           onChange={handleChange}
@@ -32,14 +37,7 @@ function Signup() {
           value={credential.password}
           required
         />
-        <button
-          onClick={() => {
-            signUp(credential.email, credential.password);
-          }}
-          type="submit"
-        >
-          Create Account
-        </button>
+        <button type="submit">Create Account</button>
       </form>
     </div>
   );
