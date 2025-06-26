@@ -1,6 +1,44 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {logOut} from "../supabase"
 
 function Dashboard() {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+      const user = localStorage.getItem("user");
+      if (!user) {
+        navigate("/login");
+      }
+    }, [navigate]);
+
+    const [myOrders, setMyOrders] = useState([]);
+    const [mySales, setMySales] = useState([]);
+    const [allItems, setAllItems] = useState([]);
+
+    const parsed = JSON.parse(localStorage.getItem("user"));
+    const userId = parsed?.user?.id;
+
+    useEffect(() => {
+      async function fetchData() {
+        if (!userId) return;
+
+        const { data: orders, error: ordersErr } = await getAllMyOrders(userId);
+        const { data: sales, error: salesErr } = await getAllMyItems(userId);
+        const { data: items, error: itemsErr } = await getAllItems();
+
+        if (orders) setMyOrders(orders);
+        if (sales) setMySales(sales);
+        if (items) setAllItems(items);
+
+        if (ordersErr) console.error("Orders Error:", ordersErr);
+        if (salesErr) console.error("Sales Error:", salesErr);
+        if (itemsErr) console.error("All Items Error:", itemsErr);
+      }
+
+      fetchData();
+    }, [userId]);
+
   function logout() {
     alert("Logging out...");
     logOut();
