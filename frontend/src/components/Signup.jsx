@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {signUp} from "../supabase";
+import { signUp } from "../supabase";
 
 function Signup() {
   const [credential, setCredential] = useState({ email: "", password: "" });
@@ -13,7 +13,7 @@ function Signup() {
   }
 
   async function handleSubmit(event) {
-    event.preventDefault(); // Prevent page reload
+    event.preventDefault(); 
     const { data, error } = await signUp(credential.email, credential.password);
     console.log("Signup Data:", data);
     console.log("Signup Error:", error);
