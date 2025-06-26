@@ -1,49 +1,58 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {logOut, getAllItems, getAllMyItems, getAllMyOrders} from "../supabase"
+import {
+  logOut,
+  getAllItems,
+  getAllMyItems,
+  getAllMyOrders,
+} from "../supabase";
 
 function Dashboard() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    useEffect(() => {
-      const user = localStorage.getItem("user");
-      if (!user) {
-        navigate("/login");
-      }
-    }, [navigate]);
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    if (!user) {
+      navigate("/login");
+    }
+  }, [navigate]);
 
-    const [myOrders, setMyOrders] = useState([]);
-    const [mySales, setMySales] = useState([]);
-    const [allItems, setAllItems] = useState([]);
+  const [myOrders, setMyOrders] = useState([]);
+  const [mySales, setMySales] = useState([]);
+  const [allItems, setAllItems] = useState([]);
 
-    const parsed = JSON.parse(localStorage.getItem("user"));
-    const userId = parsed?.user?.id;
+  const parsed = JSON.parse(localStorage.getItem("user"));
+  const userId = parsed?.user?.id;
 
-    useEffect(() => {
-      async function fetchData() {
-        if (!userId) return;
+  useEffect(() => {
+    async function fetchData() {
+      if (!userId) return;
 
-        const { data: orders, error: ordersErr } = await getAllMyOrders(userId);
-        const { data: sales, error: salesErr } = await getAllMyItems(userId);
-        const { data: items, error: itemsErr } = await getAllItems();
+      const { data: orders, error: ordersErr } = await getAllMyOrders(userId);
+      const { data: sales, error: salesErr } = await getAllMyItems(userId);
+      const { data: items, error: itemsErr } = await getAllItems();
 
-        if (orders) setMyOrders(orders);
-        if (sales) setMySales(sales);
-        if (items) setAllItems(items);
+      if (orders) setMyOrders(orders);
+      if (sales) setMySales(sales);
+      if (items) setAllItems(items);
 
-        if (ordersErr) console.error("Orders Error:", ordersErr);
-        if (salesErr) console.error("Sales Error:", salesErr);
-        if (itemsErr) console.error("All Items Error:", itemsErr);
-      }
+      if (ordersErr) console.error("Orders Error:", ordersErr);
+      if (salesErr) console.error("Sales Error:", salesErr);
+      if (itemsErr) console.error("All Items Error:", itemsErr);
+    }
 
-      fetchData();
-    }, [userId]);
+    fetchData();
+  }, [userId]);
 
-  function logout() {
+  function handleLogout() {
     alert("Logging out...");
     logOut();
     localStorage.removeItem("user");
-    window.location.href = "/login";
+    navigate("/login");
+  }
+
+  function goToListing() {
+    navigate('/listing');
   }
 
   return (
@@ -51,7 +60,10 @@ function Dashboard() {
       <div className="dashboard">
         <header className="header">
           <h2>Dashboard</h2>
-          <button className="logout-btn" onClick={logout}>
+          <button className="dashboard-btn" onClick={goToListing}>
+            List Your Waste
+          </button>
+          <button className="dashboard-btn" onClick={handleLogout}>
             Logout
           </button>
         </header>
